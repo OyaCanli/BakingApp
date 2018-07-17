@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Udacity\'s Baker</string>
+    <string name="steps">Steps</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="cont_desc_video_placeholder">When there is no video available a thumbnail is shown</string>
+</resources>
