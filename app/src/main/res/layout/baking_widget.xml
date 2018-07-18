@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/widget_margin"
     android:background="@color/widget_background">
 
     <TextView
@@ -13,6 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:gravity="center"
+        android:fontFamily="casual"
         android:contentDescription="@string/appwidget_text"
         tools:text = "Brownies"
         android:textColor="#ffffff"
@@ -25,5 +25,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/empty_tv_widget"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:fontFamily="casual"
+        android:textSize="24sp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="@dimen/half_padding"
+        android:text="@string/empty_text_widget" />
 
 </LinearLayout>

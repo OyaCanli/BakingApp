@@ -13,7 +13,6 @@ import com.canli.oya.bakingapp.utils.InjectorUtils;
 public class DetailsActivity extends AppCompatActivity {
 
     private static final String TAG = "DetailsActivity";
-    private boolean isTablet;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,16 +25,14 @@ public class DetailsActivity extends AppCompatActivity {
         DetailsViewModel viewModel = ViewModelProviders.of(this, factory).get(DetailsViewModel.class);
         viewModel.setRecipeId(mRecipeId);
 
-        isTablet = getResources().getBoolean(R.bool.isTablet);
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+
         if(!isTablet && (savedInstanceState == null)){
             MasterListFragment masterListFrag = new MasterListFragment();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.list_fragment_container, masterListFrag)
-                    .addToBackStack(null)
                     .commit();
         }
-
-        Log.d(TAG, "onCreate called and recipeId is set. recipe id is: " + mRecipeId);
     }
 
     @Override

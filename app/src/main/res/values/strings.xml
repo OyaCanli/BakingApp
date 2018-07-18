@@ -7,4 +7,5 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="cont_desc_video_placeholder">When there is no video available a thumbnail is shown</string>
+    <string name="empty_text_widget">Click here for choosing a recipe</string>
 </resources>

@@ -30,12 +30,13 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         //Get the id and name of the last chosen recipe from the preferences
         SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.WIDGET_PREFERENCES, Context.MODE_PRIVATE);
         int lastChosenRecipeId = sharedPreferences.getInt(Constants.LAST_CHOSEN_RECIPE_ID, 0);
-        String recipeName = sharedPreferences.getString(Constants.LAST_CHOSEN_RECIPE_NAME, "No recipe");
+        String recipeName = sharedPreferences.getString(Constants.LAST_CHOSEN_RECIPE_NAME, "");
         views.setTextViewText(R.id.appwidget_recipe_name, recipeName);
 
         //Set adapter
         Intent intent = new Intent(context, IngredientListWidgetService.class);
         views.setRemoteAdapter(R.id.appwidget_ingredient_list, intent);
+        views.setEmptyView(R.id.appwidget_ingredient_list, R.id.empty_tv_widget);
 
         //When clicked, if there is a chosen recipe, open details activity, otherwise open main activity
         if(lastChosenRecipeId > 0){
@@ -83,7 +84,16 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+    }
+
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds) {
+        super.onDeleted(context, appWidgetIds);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.WIDGET_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(Constants.LAST_CHOSEN_RECIPE_ID);
+        editor.remove(Constants.LAST_CHOSEN_RECIPE_NAME);
+        editor.apply();
     }
 }
 

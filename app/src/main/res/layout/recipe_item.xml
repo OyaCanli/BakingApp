@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/half_margin"
-    android:background="@drawable/rounded_item_background">
+    android:background="@drawable/rounder_brown_background"
+    android:foreground="?android:selectableItemBackground">
 
     <ImageView
         android:id="@+id/imageView"
@@ -26,6 +27,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:fontFamily="@font/dancing_script"
+        android:textSize="20sp"
         android:gravity="center"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -12,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +51,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private long videoPosition;
     private static final String TAG = "StepDetailsFragment";
     private String mVideoUrl;
+    private int mStepCount;
 
     public StepDetailsFragment() {
     }
@@ -66,8 +70,8 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         //Initialize views
         mPlayerView = rootView.findViewById(R.id.step_details_exoplayer);
         step_details_tv = rootView.findViewById(R.id.step_details_description);
-        Button previous_btn = rootView.findViewById(R.id.step_details_previous_btn);
-        Button next_btn = rootView.findViewById(R.id.step_details_next_btn);
+        ImageButton previous_btn = rootView.findViewById(R.id.step_details_previous_btn);
+        ImageButton next_btn = rootView.findViewById(R.id.step_details_next_btn);
         thumbnail_iv = rootView.findViewById(R.id.step_details_thumbnail);
 
         //Set listeners on button
@@ -93,6 +97,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
             public void onChanged(@Nullable Recipe recipe) {
                 if (recipe != null) {
                     mStepList = recipe.getStepList();
+                    mStepCount = mStepList.size();
                 }
             }
         });
@@ -105,8 +110,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         });
     }
 
-    private void populateUI(int currentStepNumber) {
-        step_details_tv.setText(mStepList.get(currentStepNumber).getDescription());
+    private void populateUI(final int currentStepNumber) {
         mVideoUrl = mStepList.get(currentStepNumber).getVideoURL();
         //If video url is not empty, set Exo Player
         if (!TextUtils.isEmpty(mVideoUrl)) {
@@ -121,6 +125,23 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
                     .error(R.drawable.ic_cake)
                     .into(thumbnail_iv);
         }
+        //Replace description text with a sliding animation
+        Animation animationOut = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_left_off);
+        animationOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Animation animationIn = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_from_right);
+                step_details_tv.startAnimation(animationIn);
+                step_details_tv.setText(mStepList.get(currentStepNumber).getDescription());
+            }
+        });
+        step_details_tv.startAnimation(animationOut);
     }
 
     private void initializePlayer() {
@@ -154,8 +175,8 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         super.onPause();
         if (mExoPlayer != null) {
             videoPosition = mExoPlayer.getCurrentPosition();
+            releasePlayer();
         }
-        releasePlayer();
     }
 
     @Override
@@ -187,14 +208,18 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     }
 
     private void setPreviousStep() {
-        releasePlayer();
-        mCurrentStep--;
-        viewModel.setCurrentStepNumber(mCurrentStep);
+        if(mCurrentStep > 0){
+            releasePlayer();
+            mCurrentStep--;
+            viewModel.setCurrentStepNumber(mCurrentStep);
+        }
     }
 
     private void setNextStep() {
-        releasePlayer();
-        mCurrentStep++;
-        viewModel.setCurrentStepNumber(mCurrentStep);
+        if(mCurrentStep < mStepCount-1){
+            releasePlayer();
+            mCurrentStep++;
+            viewModel.setCurrentStepNumber(mCurrentStep);
+        }
     }
 }

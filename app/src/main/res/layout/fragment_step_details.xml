@@ -17,7 +17,7 @@
     <ImageView
         android:id="@+id/step_details_thumbnail"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/details_thumbnail_height"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,41 +28,44 @@
     <TextView
         android:id="@+id/step_details_description"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/steps_details_text_height"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/white"
-        android:padding="@dimen/half_padding"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_white_background"
+        android:padding="@dimen/padding_standard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/step_details_exoplayer"
+        app:layout_constraintTop_toBottomOf="@id/barrier2"
         tools:text="preheat the oven to 180 degrees etc..." />
 
-    <Button
+    <ImageButton
         android:id="@+id/step_details_previous_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/previous"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_arrow_back"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/step_details_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step_details_description" />
 
-    <Button
+    <ImageButton
         android:id="@+id/step_details_next_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/colorPrimary"
-        android:text="@string/next"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_arrow_forward"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/step_details_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step_details_description" />
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier2"
