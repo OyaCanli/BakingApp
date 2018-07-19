@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.transition.Slide;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import android.transition.Fade;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +122,8 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         viewModel.setCurrentStepNumber(position);
         if(!isTablet){
             StepDetailsFragment stepDetailsFrag = new StepDetailsFragment();
+            stepDetailsFrag.setEnterTransition(new Slide(Gravity.END));
+            stepDetailsFrag.setExitTransition(new Slide(Gravity.START));
             getFragmentManager().beginTransaction()
                     .replace(R.id.list_fragment_container, stepDetailsFrag)
                     .addToBackStack(null)

@@ -52,6 +52,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private static final String TAG = "StepDetailsFragment";
     private String mVideoUrl;
     private int mStepCount;
+    private boolean shouldPlay;
 
     public StepDetailsFragment() {
     }
@@ -80,6 +81,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
 
         if (savedInstanceState != null) {
             videoPosition = savedInstanceState.getLong(Constants.VIDEO_POSITION);
+            shouldPlay = savedInstanceState.getBoolean(Constants.IS_PLAYING);
         }
 
         return rootView;
@@ -158,7 +160,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
                 getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
         mExoPlayer.prepare(mediaSource);
         mExoPlayer.seekTo(videoPosition);
-        mExoPlayer.setPlayWhenReady(false);
+        mExoPlayer.setPlayWhenReady(shouldPlay);
 
     }
 
@@ -175,6 +177,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         super.onPause();
         if (mExoPlayer != null) {
             videoPosition = mExoPlayer.getCurrentPosition();
+            shouldPlay = mExoPlayer.getPlayWhenReady();
             releasePlayer();
         }
     }
@@ -191,6 +194,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(Constants.VIDEO_POSITION, videoPosition);
+        outState.putBoolean(Constants.IS_PLAYING, shouldPlay);
     }
 
     @Override

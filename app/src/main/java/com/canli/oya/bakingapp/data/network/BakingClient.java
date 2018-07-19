@@ -1,14 +1,23 @@
 package com.canli.oya.bakingapp.data.network;
 
-import com.canli.oya.bakingapp.data.model.Recipe;
+import com.canli.oya.bakingapp.utils.Constants;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.util.List;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-import retrofit2.Call;
-import retrofit2.http.GET;
+public class BakingClient {
 
-public interface BakingClient {
+    public BakingService mBakingService;
 
-    @GET("/topher/2017/May/59121517_baking/baking.json")
-    Call<List<Recipe>> getRecipesFromNet();
+    public BakingClient() {
+        Gson gson = new GsonBuilder().create();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.RECIPE_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        mBakingService = retrofit.create(BakingService.class);
+    }
 }

@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import com.canli.oya.bakingapp.R;
@@ -42,7 +43,9 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         if(lastChosenRecipeId > 0){
             Intent detailsIntent = new Intent(context, DetailsActivity.class);
             detailsIntent.putExtra(Constants.RECIPE_ID, lastChosenRecipeId);
-            PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, detailsIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent appPendingIntent = TaskStackBuilder.create(context)
+                    .addNextIntentWithParentStack(detailsIntent)
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setOnClickPendingIntent(R.id.appwidget_root, appPendingIntent);
         } else {
             Intent mainIntent = new Intent(context, MainActivity.class);

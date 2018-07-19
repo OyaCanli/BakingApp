@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/widget_background">
+    android:background="@color/widget_background"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/appwidget_recipe_name"
@@ -17,14 +18,19 @@
         tools:text = "Brownies"
         android:textColor="#ffffff"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:padding="@dimen/half_padding"
+        android:paddingEnd="@dimen/padding_standard"
+        android:drawableRight="@drawable/ic_arrow_widget" />
 
     <ListView
         android:id="@+id/appwidget_ingredient_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp" />
+        android:layout_margin="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:descendantFocusability="blocksDescendants"/>
 
     <TextView
         android:id="@+id/empty_tv_widget"

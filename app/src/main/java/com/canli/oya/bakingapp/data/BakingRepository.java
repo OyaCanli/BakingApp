@@ -2,12 +2,15 @@ package com.canli.oya.bakingapp.data;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.canli.oya.bakingapp.data.local.RecipeDao;
-import com.canli.oya.bakingapp.data.model.Ingredient;
 import com.canli.oya.bakingapp.data.model.Recipe;
 import com.canli.oya.bakingapp.data.network.BakingClient;
+import com.canli.oya.bakingapp.data.network.BakingService;
 import com.canli.oya.bakingapp.utils.AppExecutors;
 import com.canli.oya.bakingapp.utils.Constants;
 import com.google.gson.Gson;
@@ -28,14 +31,14 @@ public class BakingRepository {
     private MediatorLiveData<List<Recipe>> mRecipesList = new MediatorLiveData<>();
     private static final String LOG_TAG = BakingRepository.class.getSimpleName();
     private final RecipeDao mRecipeDao;
-    private final BakingClient mClient;
+    private final BakingService mClient;
     private final AppExecutors mExecutors;
 
     private BakingRepository(RecipeDao dao,
                              AppExecutors executors) {
         mRecipeDao = dao;
         mExecutors = executors;
-        mClient = getBakingClientInstance();
+        mClient = new BakingClient().mBakingService;
         fetchAndSaveRecipes(mClient);
     }
 
@@ -48,29 +51,15 @@ public class BakingRepository {
         return sInstance;
     }
 
-    private BakingClient getBakingClientInstance() {
-        Gson gson = new GsonBuilder().create();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.RECIPE_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        return retrofit.create(BakingClient.class);
-    }
-
-    private void fetchAndSaveRecipes(BakingClient client) {
+    private void fetchAndSaveRecipes(BakingService client) {
         Call<List<Recipe>> loadRecipeCall = client.getRecipesFromNet();
         final ArrayList<Recipe> fetchedRecipes = new ArrayList<>();
         loadRecipeCall.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-
-                for (Recipe recipe : response.body()) {
-                    fetchedRecipes.add(recipe);
-                }
-
+                fetchedRecipes.addAll(response.body());
                 mRecipesList.postValue(fetchedRecipes);
-
+                //Back up the data into local database
                 mExecutors.diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -87,15 +76,15 @@ public class BakingRepository {
         });
     }
 
-    public LiveData<List<Recipe>> getAllRecipes(){
+    public LiveData<List<Recipe>> getAllRecipes() {
         return mRecipeDao.getAllRecipes();
     }
 
-    public LiveData<Recipe> getChosenRecipe(int recipeId){
+    public LiveData<Recipe> getChosenRecipe(int recipeId) {
         return mRecipeDao.getChosenRecipe(recipeId);
     }
 
-    public Recipe getRecipeForWidget(int recipeId){
+    public Recipe getRecipeForWidget(int recipeId) {
         return mRecipeDao.getChosenRecipeForWidget(recipeId);
     }
 }

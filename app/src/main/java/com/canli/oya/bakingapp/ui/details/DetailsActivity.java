@@ -1,10 +1,14 @@
 package com.canli.oya.bakingapp.ui.details;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.transition.Slide;
+import android.view.Gravity;
 
 import com.canli.oya.bakingapp.R;
 import com.canli.oya.bakingapp.utils.Constants;
@@ -29,6 +33,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         if(!isTablet && (savedInstanceState == null)){
             MasterListFragment masterListFrag = new MasterListFragment();
+            masterListFrag.setExitTransition(new Slide(Gravity.START));
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.list_fragment_container, masterListFrag)
                     .commit();
