@@ -31,15 +31,13 @@ public class BakingRepository {
     private MediatorLiveData<List<Recipe>> mRecipesList = new MediatorLiveData<>();
     private static final String LOG_TAG = BakingRepository.class.getSimpleName();
     private final RecipeDao mRecipeDao;
-    private final BakingService mClient;
     private final AppExecutors mExecutors;
 
     private BakingRepository(RecipeDao dao,
                              AppExecutors executors) {
         mRecipeDao = dao;
         mExecutors = executors;
-        mClient = new BakingClient().mBakingService;
-        fetchAndSaveRecipes(mClient);
+        fetchAndSaveRecipes();
     }
 
     public static BakingRepository getInstance(RecipeDao dao, AppExecutors executors) {
@@ -51,7 +49,8 @@ public class BakingRepository {
         return sInstance;
     }
 
-    private void fetchAndSaveRecipes(BakingService client) {
+    public void fetchAndSaveRecipes() {
+        BakingService client = new BakingClient().mBakingService;
         Call<List<Recipe>> loadRecipeCall = client.getRecipesFromNet();
         final ArrayList<Recipe> fetchedRecipes = new ArrayList<>();
         loadRecipeCall.enqueue(new Callback<List<Recipe>>() {

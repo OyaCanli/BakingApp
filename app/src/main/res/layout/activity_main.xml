@@ -17,4 +17,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/empty_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/details_thumbnail_height"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_cake_png"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/empty_recipes_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/no_recipes"
+        android:visibility="gone"
+        android:layout_margin="@dimen/margin_standard"
+        android:textSize="20sp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/empty_image" />
+
 </android.support.constraint.ConstraintLayout>

@@ -124,7 +124,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
             thumbnail_iv.setVisibility(View.VISIBLE);
             GlideApp.with(StepDetailsFragment.this)
                     .load(mStepList.get(currentStepNumber).getThumbnailUrl())
-                    .error(R.drawable.ic_cake)
+                    .error(R.drawable.ic_cake_png)
                     .into(thumbnail_iv);
         }
         //Replace description text with a sliding animation

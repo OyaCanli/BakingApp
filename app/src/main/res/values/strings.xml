@@ -8,4 +8,8 @@
     <string name="add_widget">Add widget</string>
     <string name="cont_desc_video_placeholder">When there is no video available a thumbnail is shown</string>
     <string name="empty_text_widget">What would you like to cook today? Click here to choose a recipe</string>
+    <string name="no_recipes">No recipes found. Could you check your connection and try again?</string>
+    <string name="retry">Retry</string>
+    <string name="click_retry">Click retry when connection is reestablished</string>
+    <string name="server_error">No response from the server. Please try again later.</string>
 </resources>
