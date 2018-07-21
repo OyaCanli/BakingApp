@@ -37,13 +37,14 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StepDetailsFragment extends Fragment implements View.OnClickListener {
 
     private SimpleExoPlayer mExoPlayer;
     private PlayerView mPlayerView;
-    private List<Step> mStepList;
+    private List<Step> mStepList = new ArrayList<>();
     private TextView step_details_tv;
     private ImageView thumbnail_iv;
     private DetailsViewModel viewModel;
@@ -100,6 +101,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
                 if (recipe != null) {
                     mStepList = recipe.getStepList();
                     mStepCount = mStepList.size();
+                    populateUI(mCurrentStep);
                 }
             }
         });
@@ -113,6 +115,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     }
 
     private void populateUI(final int currentStepNumber) {
+        if(mStepList.isEmpty()) return;
         mVideoUrl = mStepList.get(currentStepNumber).getVideoURL();
         //If video url is not empty, set Exo Player
         if (!TextUtils.isEmpty(mVideoUrl)) {
