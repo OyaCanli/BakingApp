@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
-        int spanCount = isTablet ? 3 : 2;
+        int spanCount = getResources().getInteger(R.integer.column_count);
         empty_tv = findViewById(R.id.empty_recipes_tv);
         empty_image = findViewById(R.id.empty_image);
         //Set recyclerview

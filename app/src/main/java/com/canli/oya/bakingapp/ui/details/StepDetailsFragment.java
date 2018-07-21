@@ -2,6 +2,7 @@ package com.canli.oya.bakingapp.ui.details;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -54,6 +55,9 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private String mVideoUrl;
     private int mStepCount;
     private boolean shouldPlay;
+    private ImageButton previous_btn, previous_btn_2;
+    private ImageButton next_btn, next_btn_2;
+    private boolean isLandscapeOfPhone;
 
     public StepDetailsFragment() {
     }
@@ -68,17 +72,37 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
+
+        //Pick a different resource file for landscape view of phones.
+        boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        isLandscapeOfPhone = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && !isTablet;
+        int layoutResourceId;
+        if (isLandscapeOfPhone) {
+            layoutResourceId = R.layout.fragment_step_details_land_phone;
+        } else{
+            layoutResourceId = R.layout.fragment_step_details;
+        }
+
+        View rootView = inflater.inflate(layoutResourceId, container, false);
+
         //Initialize views
         mPlayerView = rootView.findViewById(R.id.step_details_exoplayer);
         step_details_tv = rootView.findViewById(R.id.step_details_description);
-        ImageButton previous_btn = rootView.findViewById(R.id.step_details_previous_btn);
-        ImageButton next_btn = rootView.findViewById(R.id.step_details_next_btn);
         thumbnail_iv = rootView.findViewById(R.id.step_details_thumbnail);
+        previous_btn = rootView.findViewById(R.id.step_details_previous_btn);
+        next_btn = rootView.findViewById(R.id.step_details_next_btn);
 
         //Set listeners on button
         previous_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
+
+        //These are for landscape view of phones
+        if(isLandscapeOfPhone){
+            previous_btn_2 = rootView.findViewById(R.id.step_details_previous_btn_2);
+            next_btn_2 = rootView.findViewById(R.id.step_details_next_btn_2);
+            previous_btn_2.setOnClickListener(this);
+            next_btn_2.setOnClickListener(this);
+        }
 
         if (savedInstanceState != null) {
             videoPosition = savedInstanceState.getLong(Constants.VIDEO_POSITION);
@@ -121,10 +145,22 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         if (!TextUtils.isEmpty(mVideoUrl)) {
             mPlayerView.setVisibility(View.VISIBLE);
             thumbnail_iv.setVisibility(View.GONE);
+            if(isLandscapeOfPhone){
+                previous_btn.setVisibility(View.GONE);
+                next_btn.setVisibility(View.GONE);
+                previous_btn_2.setVisibility(View.VISIBLE);
+                next_btn_2.setVisibility(View.VISIBLE);
+            }
             initializePlayer();
         } else { //Otherwise shows thumbnail
             mPlayerView.setVisibility(View.GONE);
             thumbnail_iv.setVisibility(View.VISIBLE);
+            if(isLandscapeOfPhone){
+                previous_btn_2.setVisibility(View.GONE);
+                next_btn_2.setVisibility(View.GONE);
+                previous_btn.setVisibility(View.VISIBLE);
+                next_btn.setVisibility(View.VISIBLE);
+            }
             GlideApp.with(StepDetailsFragment.this)
                     .load(mStepList.get(currentStepNumber).getThumbnailUrl())
                     .error(R.drawable.ic_cake_png)
@@ -203,11 +239,13 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.step_details_previous_btn: {
+            case R.id.step_details_previous_btn:
+            case R.id.step_details_previous_btn_2: {
                 setPreviousStep();
                 break;
             }
-            case R.id.step_details_next_btn: {
+            case R.id.step_details_next_btn:
+            case R.id.step_details_next_btn_2: {
                 setNextStep();
                 break;
             }

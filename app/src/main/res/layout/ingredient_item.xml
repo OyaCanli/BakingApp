@@ -7,24 +7,20 @@
 
     <TextView
         android:id="@+id/ingredient_item_quantity"
-        android:layout_width="@dimen/ingredient_item_quantity"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="300" />
 
     <TextView
         android:id="@+id/ingredient_item_measure"
-        android:layout_width="@dimen/ingredient_item_unit"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ingredient_item_quantity"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="gr" />

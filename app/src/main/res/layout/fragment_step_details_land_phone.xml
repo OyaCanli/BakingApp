@@ -14,6 +14,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <ImageButton
+        android:id="@+id/step_details_previous_btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_arrow_back"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/step_details_exoplayer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step_details_exoplayer" />
+
+    <ImageButton
+        android:id="@+id/step_details_next_btn_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_arrow_forward"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/step_details_exoplayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/step_details_exoplayer" />
+
     <ImageView
         android:id="@+id/step_details_thumbnail"
         android:layout_width="match_parent"
@@ -29,10 +56,7 @@
         android:id="@+id/step_details_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_standard"
-        android:layout_marginEnd="@dimen/margin_standard"
-        android:layout_marginTop="@dimen/half_margin"
-        android:layout_marginBottom="@dimen/half_margin"
+        android:layout_margin="@dimen/margin_standard"
         android:background="@drawable/rounded_white_background"
         android:minHeight="@dimen/steps_details_text_height"
         android:padding="@dimen/padding_standard"
