@@ -18,4 +18,8 @@ public class Constants {
     public static final String LAST_CHOSEN_RECIPE_NAME = "lastChosenRecipeName";
 
     public static final String IS_PLAYING = "isPlaying";
+
+    public static final String CHECKED = "checked";
+
+    public static final String UNCHECKED = "unChecked";
 }

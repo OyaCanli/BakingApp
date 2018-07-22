@@ -7,15 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.transition.ChangeBounds;
 import android.support.transition.Slide;
+import android.support.transition.TransitionManager;
+import android.support.transition.TransitionSet;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.ChangeBounds;
-import android.transition.Fade;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,7 +31,8 @@ import com.canli.oya.bakingapp.utils.InjectorUtils;
 
 import java.util.List;
 
-public class MasterListFragment extends Fragment implements View.OnClickListener, StepListAdapter.StepClickListener{
+public class MasterListFragment extends Fragment implements View.OnClickListener,
+        StepListAdapter.StepClickListener, IngredientsAdapter.OnIngredientCheckedListener{
 
     private static final String TAG = "MasterListFragment";
     private List<Ingredient> mIngredientList;
@@ -47,6 +47,8 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     private boolean isTablet;
     private DetailsViewModel viewModel;
     private boolean isStepsShown;
+    RecyclerView ingredientRecycler;
+    RecyclerView stepRecycler;
 
     public MasterListFragment() {
     }
@@ -63,14 +65,14 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.fragment_list_initial, container, false);
 
         //Set ingredients recyclerview
-        RecyclerView ingredientRecycler = rootView.findViewById(R.id.recycler_ingredients);
+        ingredientRecycler = rootView.findViewById(R.id.recycler_ingredients);
         ingredientRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         ingredientRecycler.setItemAnimator(new DefaultItemAnimator());
-        ingredientsAdapter = new IngredientsAdapter(getActivity());
+        ingredientsAdapter = new IngredientsAdapter(getActivity(), this);
         ingredientRecycler.setAdapter(ingredientsAdapter);
 
         //Set step list adapter
-        RecyclerView stepRecycler = rootView.findViewById(R.id.recycler_steps);
+        stepRecycler = rootView.findViewById(R.id.recycler_steps);
         stepRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         stepRecycler.setItemAnimator(new DefaultItemAnimator());
         stepListAdapter = new StepListAdapter(getActivity(), this);
@@ -109,9 +111,19 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
                 if (recipe != null) {
                     getActivity().setTitle(recipe.getRecipeName());
                     mIngredientList = recipe.getIngredientList();
+                    ingredientsAdapter.setCheckedStates(viewModel.initializeCheckedIngredientsArray(mIngredientList.size()));
                     ingredientsAdapter.setIngredients(mIngredientList);
                     mStepList = recipe.getStepList();
                     stepListAdapter.setSteps(mStepList);
+                }
+            }
+        });
+        viewModel.getCheckedIngredients().observe(this, new Observer<List<Boolean>>() {
+            @Override
+            public void onChanged(@Nullable List<Boolean> booleans) {
+                if(booleans != null){
+                    ingredientsAdapter.setCheckedStates(booleans);
+                    Log.d(TAG, "Inside onChanged.");
                 }
             }
         });
@@ -137,7 +149,6 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         if(isStepsShown){
             showStepList();
         }
-        Log.d(TAG, "onResume");
     }
 
     @Override
@@ -156,14 +167,24 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
 
     private void showStepList(){
         isStepsShown = true;
-        TransitionManager.beginDelayedTransition(mConstraintLayout, new MasterListFragment.MyTransition());
+        stepRecycler.setVisibility(View.VISIBLE);
+        ingredientRecycler.setVisibility(View.GONE);
+        TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
         mConstraintSet2.applyTo(mConstraintLayout);
     }
 
     private void showIngredients(){
         isStepsShown = false;
-        TransitionManager.beginDelayedTransition(mConstraintLayout, new MasterListFragment.MyTransition());
+        ingredientRecycler.setVisibility(View.VISIBLE);
+        stepRecycler.setVisibility(View.GONE);
+        TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
         mConstraintSet1.applyTo(mConstraintLayout);
+    }
+
+    @Override
+    public void onIngredientChecked(int position, boolean checkedState) {
+        viewModel.setCheckedStateOfIngredients(position, checkedState);
+        Log.d(TAG, "checked state changed. " + position + " " + checkedState);
     }
 
     //Custom transition used during the transition of constraint sets
