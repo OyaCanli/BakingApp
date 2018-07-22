@@ -20,7 +20,10 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.canli.oya.bakingapp.R;
 import com.canli.oya.bakingapp.data.model.Ingredient;
@@ -47,8 +50,10 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     private boolean isTablet;
     private DetailsViewModel viewModel;
     private boolean isStepsShown;
-    RecyclerView ingredientRecycler;
-    RecyclerView stepRecycler;
+    private RecyclerView ingredientRecycler;
+    private RecyclerView stepRecycler;
+    private ImageButton ingredients_signifier;
+    private ImageButton steps_signifier;
 
     public MasterListFragment() {
     }
@@ -83,6 +88,9 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         showSteps_btn.setOnClickListener(this);
         showIngredients_btn = rootView.findViewById(R.id.ingredients_btn);
         showIngredients_btn.setOnClickListener(this);
+
+        ingredients_signifier = rootView.findViewById(R.id.ingredients_signifier_arrow);
+        steps_signifier = rootView.findViewById(R.id.steps_signifier_arrow);
 
         //Set constraint sets for a constraint set animation
         mConstraintSet1 = new ConstraintSet();
@@ -166,19 +174,88 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     }
 
     private void showStepList(){
-        isStepsShown = true;
-        stepRecycler.setVisibility(View.VISIBLE);
-        ingredientRecycler.setVisibility(View.GONE);
-        TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
-        mConstraintSet2.applyTo(mConstraintLayout);
+        if(!isStepsShown){
+            isStepsShown = true;
+            stepRecycler.setVisibility(View.VISIBLE);
+            ingredientRecycler.setVisibility(View.GONE);
+            //Set a rotation animation on the ingredients signifier arrow and change the drawable
+            Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
+            rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    ingredients_signifier.setImageResource(R.drawable.ic_arrow_downward);
+                }
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            ingredients_signifier.startAnimation(rotate_clockwise);
+
+            //Set a rotation animation on the steps signifier arrow and change the drawable
+            Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
+            rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    steps_signifier.setImageResource(R.drawable.ic_arrow_right);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            steps_signifier.startAnimation(rotate_counter_clockwise);
+
+            TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
+            mConstraintSet2.applyTo(mConstraintLayout);
+        }
+
     }
 
     private void showIngredients(){
-        isStepsShown = false;
-        ingredientRecycler.setVisibility(View.VISIBLE);
-        stepRecycler.setVisibility(View.GONE);
-        TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
-        mConstraintSet1.applyTo(mConstraintLayout);
+        if(isStepsShown){
+            isStepsShown = false;
+            ingredientRecycler.setVisibility(View.VISIBLE);
+            stepRecycler.setVisibility(View.GONE);
+
+            //Set a rotation animation on the steps signifier arrow and change the drawable
+            Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
+            rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    steps_signifier.setImageResource(R.drawable.ic_arrow_downward);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            steps_signifier.startAnimation(rotate_clockwise);
+
+            //Set a rotation animation on the ingredients signifier arrow and change the drawable
+            Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
+            rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    ingredients_signifier.setImageResource(R.drawable.ic_arrow_right);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            ingredients_signifier.startAnimation(rotate_counter_clockwise);
+
+            TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
+            mConstraintSet1.applyTo(mConstraintLayout);
+        }
     }
 
     @Override
