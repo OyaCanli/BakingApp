@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/half_margin"
-    android:background="@drawable/rounder_brown_background"
+    android:background="@drawable/rounder_brown_with_gradient"
     android:foreground="?android:selectableItemBackground">
 
     <ImageView

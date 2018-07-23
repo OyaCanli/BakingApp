@@ -35,13 +35,13 @@ import com.canli.oya.bakingapp.utils.InjectorUtils;
 import java.util.List;
 
 public class MasterListFragment extends Fragment implements View.OnClickListener,
-        StepListAdapter.StepClickListener, IngredientsAdapter.OnIngredientCheckedListener{
+        StepAdapter.StepClickListener, IngredientsAdapter.OnIngredientCheckedListener {
 
     private static final String TAG = "MasterListFragment";
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
     private IngredientsAdapter ingredientsAdapter;
-    private StepListAdapter stepListAdapter;
+    private StepAdapter stepAdapter;
     private ConstraintLayout mConstraintLayout;
     private ConstraintSet mConstraintSet2;
     private ConstraintSet mConstraintSet1;
@@ -56,6 +56,7 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     private ImageButton steps_signifier;
 
     public MasterListFragment() {
+        setRetainInstance(true);
     }
 
     @Override
@@ -80,8 +81,8 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         stepRecycler = rootView.findViewById(R.id.recycler_steps);
         stepRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         stepRecycler.setItemAnimator(new DefaultItemAnimator());
-        stepListAdapter = new StepListAdapter(getActivity(), this);
-        stepRecycler.setAdapter(stepListAdapter);
+        stepAdapter = new StepAdapter(getActivity(), this);
+        stepRecycler.setAdapter(stepAdapter);
 
         //Set click listeners on buttons
         showSteps_btn = rootView.findViewById(R.id.steps_btn);
@@ -101,16 +102,18 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
 
         isTablet = getResources().getBoolean(R.bool.isTablet);
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             isStepsShown = savedInstanceState.getBoolean(Constants.IS_STEPS_SHOWN);
+            Log.d(TAG, "onCreateView. Savedinstance = isStepsShown: " + isStepsShown);
         }
-
+        Log.d(TAG, "onCreateView. isStepsShown: " + isStepsShown);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(TAG, "onActivityCreated called. isStepsShown: " + isStepsShown);
         DetailsViewModelFactory factory = InjectorUtils.provideDetailsViewModelFactory(getActivity());
         viewModel = ViewModelProviders.of(getActivity(), factory).get(DetailsViewModel.class);
         viewModel.getChosenRecipe().observe(this, new Observer<Recipe>() {
@@ -122,17 +125,24 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
                     ingredientsAdapter.setCheckedStates(viewModel.initializeCheckedIngredientsArray(mIngredientList.size()));
                     ingredientsAdapter.setIngredients(mIngredientList);
                     mStepList = recipe.getStepList();
-                    stepListAdapter.setSteps(mStepList);
+                    stepAdapter.setSteps(mStepList);
                 }
             }
         });
         viewModel.getCheckedIngredients().observe(this, new Observer<List<Boolean>>() {
             @Override
             public void onChanged(@Nullable List<Boolean> booleans) {
-                if(booleans != null){
+                if (booleans != null) {
                     ingredientsAdapter.setCheckedStates(booleans);
                     Log.d(TAG, "Inside onChanged.");
                 }
+            }
+        });
+        viewModel.getCurrentStepNumber().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer stepNumber) {
+                stepAdapter.setSelectedStep(stepNumber);
+                stepAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -140,7 +150,7 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onStepClicked(int position) {
         viewModel.setCurrentStepNumber(position);
-        if(!isTablet){
+        if (!isTablet) {
             StepDetailsFragment stepDetailsFrag = new StepDetailsFragment();
             stepDetailsFrag.setEnterTransition(new Slide(Gravity.END));
             stepDetailsFrag.setExitTransition(new Slide(Gravity.START));
@@ -154,108 +164,128 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        if(isStepsShown){
+        Log.d(TAG, "onResume. isStepsShown: " + isStepsShown);
+        if (isStepsShown) {
             showStepList();
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.steps_btn:{
-                showStepList();
+        switch (v.getId()) {
+            case R.id.steps_btn: {
+                if (!isStepsShown) {
+                    showStepList();
+                }
                 break;
             }
-            case R.id.ingredients_btn:{
-                showIngredients();
+            case R.id.ingredients_btn: {
+                if (isStepsShown) {
+                    showIngredients();
+                }
                 break;
             }
         }
     }
 
-    private void showStepList(){
-        if(!isStepsShown){
-            isStepsShown = true;
-            stepRecycler.setVisibility(View.VISIBLE);
-            ingredientRecycler.setVisibility(View.GONE);
-            //Set a rotation animation on the ingredients signifier arrow and change the drawable
-            Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
-            rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) { }
+    private void showStepList() {
+        isStepsShown = true;
+        stepRecycler.setVisibility(View.VISIBLE);
+        ingredientRecycler.setVisibility(View.GONE);
+        //Set a rotation animation on the ingredients signifier arrow and change the drawable
+        Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
+        rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    ingredients_signifier.setImageResource(R.drawable.ic_arrow_downward);
-                }
-                @Override
-                public void onAnimationRepeat(Animation animation) { }
-            });
-            ingredients_signifier.startAnimation(rotate_clockwise);
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ingredients_signifier.setImageResource(R.drawable.ic_arrow_downward);
+            }
 
-            //Set a rotation animation on the steps signifier arrow and change the drawable
-            Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
-            rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) { }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        ingredients_signifier.startAnimation(rotate_clockwise);
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    steps_signifier.setImageResource(R.drawable.ic_arrow_right);
-                }
+        //Set a rotation animation on the steps signifier arrow and change the drawable
+        Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
+        rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) { }
-            });
-            steps_signifier.startAnimation(rotate_counter_clockwise);
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                steps_signifier.setImageResource(R.drawable.ic_arrow_right);
+            }
 
-            TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
-            mConstraintSet2.applyTo(mConstraintLayout);
-        }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        steps_signifier.startAnimation(rotate_counter_clockwise);
+
+        TransitionManager.beginDelayedTransition(mConstraintLayout, getTransitionSet());
+        mConstraintSet2.applyTo(mConstraintLayout);
+
 
     }
 
-    private void showIngredients(){
-        if(isStepsShown){
-            isStepsShown = false;
-            ingredientRecycler.setVisibility(View.VISIBLE);
-            stepRecycler.setVisibility(View.GONE);
+    private void showIngredients() {
+        isStepsShown = false;
+        ingredientRecycler.setVisibility(View.VISIBLE);
+        stepRecycler.setVisibility(View.GONE);
 
-            //Set a rotation animation on the steps signifier arrow and change the drawable
-            Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
-            rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) { }
+        //Set a rotation animation on the steps signifier arrow and change the drawable
+        Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
+        rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    steps_signifier.setImageResource(R.drawable.ic_arrow_downward);
-                }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                steps_signifier.setImageResource(R.drawable.ic_arrow_downward);
+            }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) { }
-            });
-            steps_signifier.startAnimation(rotate_clockwise);
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        steps_signifier.startAnimation(rotate_clockwise);
 
-            //Set a rotation animation on the ingredients signifier arrow and change the drawable
-            Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
-            rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) { }
+        //Set a rotation animation on the ingredients signifier arrow and change the drawable
+        Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
+        rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    ingredients_signifier.setImageResource(R.drawable.ic_arrow_right);
-                }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ingredients_signifier.setImageResource(R.drawable.ic_arrow_right);
+            }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) { }
-            });
-            ingredients_signifier.startAnimation(rotate_counter_clockwise);
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        ingredients_signifier.startAnimation(rotate_counter_clockwise);
 
-            TransitionManager.beginDelayedTransition(mConstraintLayout, new MyTransition());
-            mConstraintSet1.applyTo(mConstraintLayout);
-        }
+        TransitionManager.beginDelayedTransition(mConstraintLayout, getTransitionSet());
+        mConstraintSet1.applyTo(mConstraintLayout);
+
+    }
+
+    @NonNull
+    private TransitionSet getTransitionSet() {
+        TransitionSet myTransition = new TransitionSet();
+        myTransition.addTransition(new ChangeBounds());
+        myTransition.setDuration(1000);
+        return myTransition;
     }
 
     @Override
@@ -264,14 +294,6 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         Log.d(TAG, "checked state changed. " + position + " " + checkedState);
     }
 
-    //Custom transition used during the transition of constraint sets
-    static private class MyTransition extends TransitionSet {
-        {
-            setDuration(1000);
-            setOrdering(ORDERING_TOGETHER);
-            addTransition(new ChangeBounds());
-        }
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {

@@ -15,6 +15,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:textColor="@color/colorPrimaryDark"
         tools:text="300" />
 
     <TextView
@@ -22,6 +23,7 @@
         android:layout_width="@dimen/ingredient_item_unit"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -32,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"

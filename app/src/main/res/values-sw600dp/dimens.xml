@@ -9,8 +9,7 @@
     <dimen name="exoplayer_height">300dp</dimen>
     <dimen name="ingredient_item_quantity">60dp</dimen>
     <dimen name="ingredient_item_unit">50dp</dimen>
-    <dimen name="details_thumbnail_height">200dp</dimen>
-    <dimen name="details_thumbnail_width">300dp</dimen>
-    <dimen name="details_thumbnail_height_land_phone">150dp</dimen>
+    <dimen name="details_thumbnail_height">300dp</dimen>
+    <dimen name="details_thumbnail_width">350dp</dimen>
     <dimen name="steps_details_text_height">80dp</dimen>
 </resources>

@@ -1,8 +1,12 @@
 package com.canli.oya.bakingapp.ui.details;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +17,16 @@ import com.canli.oya.bakingapp.data.model.Step;
 
 import java.util.List;
 
-public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepHolder> {
+public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
 
     private List<Step> mStepList;
     private StepClickListener mListener;
     private Context mContext;
+    private int mSelectedStep = 0;
+    private Typeface defaultTypeFace;
+    private ColorStateList defaultTextColor;
 
-    StepListAdapter(Context context, StepClickListener listener) {
+    StepAdapter(Context context, StepClickListener listener) {
         this.mListener = listener;
         mContext = context;
     }
@@ -27,6 +34,10 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepHo
     public void setSteps(List<Step> steps){
         mStepList = steps;
         notifyDataSetChanged();
+    }
+
+    public void setSelectedStep(int selectedStep) {
+        mSelectedStep = selectedStep;
     }
 
     @NonNull
@@ -38,9 +49,24 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepHo
 
     @Override
     public void onBindViewHolder(@NonNull StepHolder holder, int position) {
+
         Step currentStep = mStepList.get(position);
         holder.stepNumber_tv.setText(String.valueOf(position));
         holder.stepTitle_tv.setText(currentStep.getShortDescription());
+
+        //This part is for giving feedback about the selected steps
+        if(position == mSelectedStep){
+            holder.stepTitle_tv.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+            holder.stepTitle_tv.setTypeface(defaultTypeFace, Typeface.BOLD);
+            holder.stepNumber_tv.setTextColor(mContext.getResources().getColor(android.R.color.white));
+            holder.stepNumber_tv.setBackground(mContext.getResources().getDrawable(R.drawable.circle_background));
+        } else{
+            holder.stepTitle_tv.setTextColor(defaultTextColor);
+            holder.stepTitle_tv.setTypeface(defaultTypeFace, Typeface.NORMAL);
+            holder.stepNumber_tv.setTextColor(defaultTextColor);
+            holder.stepNumber_tv.setBackground(mContext.getResources().getDrawable(android.R.color.transparent));
+        }
+        //This part is for giving exchanging between two background colors at each row, for improving visibility
         if(position%2 == 1){
             holder.itemView.setBackgroundColor(mContext.getResources().getColor(R.color.item_background));
         } else{
@@ -62,6 +88,8 @@ public class StepListAdapter extends RecyclerView.Adapter<StepListAdapter.StepHo
             stepNumber_tv = itemView.findViewById(R.id.step_item_number);
             stepTitle_tv = itemView.findViewById(R.id.step_item_short_desc);
             itemView.setOnClickListener(this);
+            defaultTypeFace = stepTitle_tv.getTypeface();
+            defaultTextColor = stepTitle_tv.getTextColors();
         }
 
         @Override

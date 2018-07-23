@@ -162,7 +162,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
             }
             GlideApp.with(StepDetailsFragment.this)
                     .load(mStepList.get(currentStepNumber).getThumbnailUrl())
-                    .error(R.drawable.ic_cake_png)
+                    .error(R.drawable.placeholder)
                     .into(thumbnail_iv);
         }
         //Replace description text with a sliding animation
@@ -254,6 +254,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private void setPreviousStep() {
         if(mCurrentStep > 0){
             releasePlayer();
+            videoPosition = 0;
             mCurrentStep--;
             viewModel.setCurrentStepNumber(mCurrentStep);
         }
@@ -262,6 +263,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private void setNextStep() {
         if(mCurrentStep < mStepCount-1){
             releasePlayer();
+            videoPosition = 0;
             mCurrentStep++;
             viewModel.setCurrentStepNumber(mCurrentStep);
         }

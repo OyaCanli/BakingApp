@@ -16,9 +16,12 @@
 
     <ImageView
         android:id="@+id/step_details_thumbnail"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/details_thumbnail_width"
         android:layout_height="@dimen/details_thumbnail_height"
         android:scaleType="centerInside"
+        android:layout_margin="@dimen/margin_standard"
+        android:padding="@dimen/padding_standard"
+        android:background="@drawable/rounded_brown_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
