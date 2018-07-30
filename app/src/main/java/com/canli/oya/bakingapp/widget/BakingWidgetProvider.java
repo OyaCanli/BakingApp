@@ -11,18 +11,13 @@ import android.support.v4.app.TaskStackBuilder;
 import android.widget.RemoteViews;
 
 import com.canli.oya.bakingapp.R;
-import com.canli.oya.bakingapp.data.BakingRepository;
 import com.canli.oya.bakingapp.ui.details.DetailsActivity;
 import com.canli.oya.bakingapp.ui.mainlist.MainActivity;
 import com.canli.oya.bakingapp.utils.Constants;
-import com.canli.oya.bakingapp.utils.InjectorUtils;
 
-/**
- * Implementation of App Widget functionality.
- */
 public class BakingWidgetProvider extends AppWidgetProvider {
 
-    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
         // Construct the RemoteViews object
@@ -68,27 +63,27 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
+    /*This is a helper method in order to call for updating widget
+    without a need to all the parameters updateAppWidget method uses*/
+
     public static void triggerUpdate(Context context){
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context, BakingWidgetProvider.class));
         //Trigger data update to handle the GridView widgets and force a data refresh
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.appwidget_ingredient_list);
         //Now update all widgets
-        int length = appWidgetIds.length;
-        for (int i = 0; i < length; i++) {
-            BakingWidgetProvider.updateAppWidget(context, appWidgetManager, appWidgetIds[i]);
+        for(int appWidgetId : appWidgetIds){
+            BakingWidgetProvider.updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
     @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
-    }
+    public void onEnabled(Context context) { }
 
     @Override
-    public void onDisabled(Context context) {
-    }
+    public void onDisabled(Context context) { }
 
+    //When widget is removed from the home screen, delete widget related info from shared preferences
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
         super.onDeleted(context, appWidgetIds);

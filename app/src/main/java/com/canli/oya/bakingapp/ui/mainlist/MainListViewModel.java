@@ -10,11 +10,9 @@ import java.util.List;
 
 public class MainListViewModel extends ViewModel {
 
-    private final BakingRepository mRepository;
     private final LiveData<List<Recipe>> recipes;
 
-    public MainListViewModel(BakingRepository repository) {
-        mRepository = repository;
+    MainListViewModel(BakingRepository repository) {
         recipes = repository.getAllRecipes();
     }
 

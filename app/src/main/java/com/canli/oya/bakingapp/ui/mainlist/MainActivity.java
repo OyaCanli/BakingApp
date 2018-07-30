@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         // Set recyclerview
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(this, spanCount));
-        final RecipeAdapter adapter = new RecipeAdapter(this);
+        final RecipeAdapter adapter = new RecipeAdapter(this, this);
         recycler.setAdapter(adapter);
 
         //Set resources not idle as fetching will start
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
                     mSimpleIdlingResource.setIdleState(true);
                 }
 
-                if(recipes.isEmpty()){
+                if(recipes == null || recipes.isEmpty()){
                     showEmpty();
                 } else{
                     adapter.setRecipes(recipes);
@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         });
     }
 
+    /*This can happen only if there is a problem at the first launch.
+    Like no connection or if there occurs a problem with the server.
+    Once data is fetches successfully, in the next opening data can be shown from local database*/
     private void showEmpty(){
         if(!thereIsConnection()){
             showSnack();
@@ -97,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         emptyDataShown = true;
     }
 
+    /*This snack bar contains a button to retry loading.
+    This might be needed only if there is no connection during first launch*/
     private void showSnack(){
         Snackbar snackbar = Snackbar
                 .make(recycler, R.string.click_retry, Snackbar.LENGTH_INDEFINITE)
@@ -118,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         }
     }
 
+    //Check whether there is internet connection
     private boolean thereIsConnection(){
         ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         // Get details on the currently active default data network
@@ -147,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements RecipeAdapter.Rec
         startActivity(intent);
     }
 
+    //This is for testing purposes
     @NonNull
     @VisibleForTesting
     public IdlingResource getIdlingResource() {

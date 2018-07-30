@@ -10,7 +10,7 @@
     android:foreground="?android:selectableItemBackground">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/recipe_item_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
@@ -20,7 +20,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_cake" />
+        android:src="@drawable/ic_cake"
+        android:contentDescription="@string/cd_recipe_image"/>
 
     <TextView
         android:id="@+id/recipe_item_name"
@@ -35,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_item_image"
         tools:text="Nutella Pie" />
 
 </android.support.constraint.ConstraintLayout>

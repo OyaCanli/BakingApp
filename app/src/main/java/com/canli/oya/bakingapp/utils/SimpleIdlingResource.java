@@ -13,7 +13,7 @@ public class SimpleIdlingResource implements IdlingResource {
     @Nullable
     private volatile ResourceCallback mCallback;
 
-    private AtomicBoolean mIsIdleNow = new AtomicBoolean(true);
+    private final AtomicBoolean mIsIdleNow = new AtomicBoolean(true);
 
     @Override
     public String getName() {

@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_cake"
-        android:alpha="0.6"/>
+        android:alpha="0.6"
+        android:contentDescription="@string/cd_widget_background"/>
 
     <TextView
         android:id="@+id/appwidget_recipe_name"
@@ -19,14 +20,15 @@
         android:background="@color/colorPrimary"
         android:gravity="center"
         android:fontFamily="casual"
-        android:contentDescription="@string/appwidget_text"
+        android:contentDescription="@string/cd_widget_text"
         tools:text = "Brownies"
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold"
         android:padding="@dimen/half_padding"
         android:paddingEnd="@dimen/padding_standard"
-        android:drawableRight="@drawable/ic_arrow_widget" />
+        android:paddingStart="@dimen/half_padding"
+        android:drawableEnd="@drawable/ic_arrow_widget" />
 
     <ListView
         android:id="@+id/appwidget_ingredient_list"

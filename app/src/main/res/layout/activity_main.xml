@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.mainlist.MainActivity"
-    android:background="@color/background">
+    tools:context=".ui.mainlist.MainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
@@ -26,7 +25,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@string/cd_empty_image"/>
 
     <TextView
         android:id="@+id/empty_recipes_tv"

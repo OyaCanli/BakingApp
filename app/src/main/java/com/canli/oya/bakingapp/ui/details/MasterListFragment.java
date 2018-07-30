@@ -37,7 +37,6 @@ import java.util.List;
 public class MasterListFragment extends Fragment implements View.OnClickListener,
         StepAdapter.StepClickListener, IngredientsAdapter.OnIngredientCheckedListener {
 
-    private static final String TAG = "MasterListFragment";
     private List<Ingredient> mIngredientList;
     private List<Step> mStepList;
     private IngredientsAdapter ingredientsAdapter;
@@ -45,8 +44,6 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     private ConstraintLayout mConstraintLayout;
     private ConstraintSet mConstraintSet2;
     private ConstraintSet mConstraintSet1;
-    private Button showSteps_btn;
-    private Button showIngredients_btn;
     private boolean isTablet;
     private DetailsViewModel viewModel;
     private boolean isStepsShown;
@@ -85,13 +82,15 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         stepRecycler.setAdapter(stepAdapter);
 
         //Set click listeners on buttons
-        showSteps_btn = rootView.findViewById(R.id.steps_btn);
+        Button showSteps_btn = rootView.findViewById(R.id.steps_btn);
         showSteps_btn.setOnClickListener(this);
-        showIngredients_btn = rootView.findViewById(R.id.ingredients_btn);
+        Button showIngredients_btn = rootView.findViewById(R.id.ingredients_btn);
         showIngredients_btn.setOnClickListener(this);
 
         ingredients_signifier = rootView.findViewById(R.id.ingredients_signifier_arrow);
+        ingredients_signifier.bringToFront();
         steps_signifier = rootView.findViewById(R.id.steps_signifier_arrow);
+        steps_signifier.bringToFront();
 
         //Set constraint sets for a constraint set animation
         mConstraintSet1 = new ConstraintSet();
@@ -104,23 +103,20 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
 
         if (savedInstanceState != null) {
             isStepsShown = savedInstanceState.getBoolean(Constants.IS_STEPS_SHOWN);
-            Log.d(TAG, "onCreateView. Savedinstance = isStepsShown: " + isStepsShown);
         }
-        Log.d(TAG, "onCreateView. isStepsShown: " + isStepsShown);
         return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(TAG, "onActivityCreated called. isStepsShown: " + isStepsShown);
-        DetailsViewModelFactory factory = InjectorUtils.provideDetailsViewModelFactory(getActivity());
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(DetailsViewModel.class);
+        DetailsViewModelFactory factory = InjectorUtils.provideDetailsViewModelFactory(requireActivity());
+        viewModel = ViewModelProviders.of(requireActivity(), factory).get(DetailsViewModel.class);
         viewModel.getChosenRecipe().observe(this, new Observer<Recipe>() {
             @Override
             public void onChanged(@Nullable Recipe recipe) {
                 if (recipe != null) {
-                    getActivity().setTitle(recipe.getRecipeName());
+                    requireActivity().setTitle(recipe.getRecipeName());
                     mIngredientList = recipe.getIngredientList();
                     ingredientsAdapter.setCheckedStates(viewModel.initializeCheckedIngredientsArray(mIngredientList.size()));
                     ingredientsAdapter.setIngredients(mIngredientList);
@@ -134,7 +130,6 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
             public void onChanged(@Nullable List<Boolean> booleans) {
                 if (booleans != null) {
                     ingredientsAdapter.setCheckedStates(booleans);
-                    Log.d(TAG, "Inside onChanged.");
                 }
             }
         });
@@ -164,7 +159,6 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume. isStepsShown: " + isStepsShown);
         if (isStepsShown) {
             showStepList();
         }
@@ -291,7 +285,6 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     @Override
     public void onIngredientChecked(int position, boolean checkedState) {
         viewModel.setCheckedStateOfIngredients(position, checkedState);
-        Log.d(TAG, "checked state changed. " + position + " " + checkedState);
     }
 
 
@@ -299,6 +292,5 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Constants.IS_STEPS_SHOWN, isStepsShown);
-        Log.d(TAG, "onSaveInstanceState is called ");
     }
 }

@@ -2,14 +2,18 @@
     <string name="app_name">Udacity\'s Baker</string>
     <string name="steps">Steps</string>
     <string name="ingredients">Ingredients</string>
-    <string name="previous">Previous</string>
-    <string name="next">Next</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
     <string name="cont_desc_video_placeholder">When there is no video available a thumbnail is shown</string>
     <string name="empty_text_widget">What would you like to cook today? Click here to choose a recipe</string>
     <string name="no_recipes">No recipes found. Could you check your connection and try again?</string>
     <string name="retry">Retry</string>
     <string name="click_retry">Click retry when connection is reestablished</string>
     <string name="server_error">No response from the server. Please try again later.</string>
+    <string name="cd_recipe_image">Recipe image</string>
+    <string name="cd_empty_image">cake image shown if recipe image is not available</string>
+    <string name="cd_signifier_arrow">An arrow for signifying that this is clickable</string>
+    <string name="cd_play_icon">play icon which signifies that items are clickable and opens a video if available</string>
+    <string name="cd_previous_button">The button which displays the previous step</string>
+    <string name="cd_next_button">The button which displays the next step when clicked</string>
+    <string name="cd_widget_background">App icon as background image of widget</string>
+    <string name="cd_widget_text">The name of the chosen recipe</string>
 </resources>

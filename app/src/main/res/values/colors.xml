@@ -5,6 +5,5 @@
     <color name="colorAccent">#E6A52E</color>
     <color name="background">#E6A52E</color>
     <color name="item_background">#fff4e5</color>
-    <color name="widget_background">#ffc980</color>
     <color name="gradient_color">#926153</color>
 </resources>

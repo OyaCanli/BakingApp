@@ -2,11 +2,9 @@ package com.canli.oya.bakingapp.ui.details;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +18,8 @@ import java.util.List;
 public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepHolder> {
 
     private List<Step> mStepList;
-    private StepClickListener mListener;
-    private Context mContext;
+    private final StepClickListener mListener;
+    private final Context mContext;
     private int mSelectedStep = 0;
     private Typeface defaultTypeFace;
     private ColorStateList defaultTextColor;

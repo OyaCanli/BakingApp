@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background">
+    android:layout_height="match_parent">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/step_details_exoplayer"
@@ -26,7 +25,8 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/step_details_exoplayer"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/step_details_exoplayer" />
+        app:layout_constraintTop_toTopOf="@+id/step_details_exoplayer"
+        android:contentDescription="@string/cd_previous_button"/>
 
     <ImageButton
         android:id="@+id/step_details_next_btn_2"
@@ -39,7 +39,8 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/step_details_exoplayer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/step_details_exoplayer" />
+        app:layout_constraintTop_toTopOf="@+id/step_details_exoplayer"
+        android:contentDescription="@string/cd_next_button"/>
 
     <ImageView
         android:id="@+id/step_details_thumbnail"
@@ -81,7 +82,8 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/step_details_description"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/step_details_description" />
+        app:layout_constraintTop_toTopOf="@+id/step_details_description"
+        android:contentDescription="@string/cd_previous_button"/>
 
     <ImageButton
         android:id="@+id/step_details_next_btn"
@@ -94,7 +96,8 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/step_details_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/step_details_description" />
+        app:layout_constraintTop_toTopOf="@+id/step_details_description"
+        android:contentDescription="@string/cd_next_button"/>
 
     <android.support.constraint.Barrier
         android:id="@+id/barrier2"

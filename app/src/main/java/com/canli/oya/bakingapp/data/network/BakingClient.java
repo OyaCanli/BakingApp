@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BakingClient {
 
-    public BakingService mBakingService;
+    public final BakingService mBakingService;
 
     public BakingClient() {
         Gson gson = new GsonBuilder().create();

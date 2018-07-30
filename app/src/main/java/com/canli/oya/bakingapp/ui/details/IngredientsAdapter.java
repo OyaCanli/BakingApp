@@ -20,9 +20,9 @@ import java.util.List;
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.IngredientHolder>{
 
     private List<Ingredient> mIngredientList;
-    private List<Boolean> mCheckedStates = new ArrayList<>();
-    private Context mContext;
-    private OnIngredientCheckedListener mListener;
+    private final List<Boolean> mCheckedStates = new ArrayList<>();
+    private final Context mContext;
+    private final OnIngredientCheckedListener mListener;
     private static final String TAG = "IngredientsAdapter";
 
     IngredientsAdapter(Context context, OnIngredientCheckedListener listener){

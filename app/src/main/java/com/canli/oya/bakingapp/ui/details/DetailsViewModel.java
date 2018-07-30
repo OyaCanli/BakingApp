@@ -14,10 +14,10 @@ public class DetailsViewModel extends ViewModel {
 
     private LiveData<Recipe> chosenRecipe;
     private int mRecipeId;
-    private BakingRepository mRepo;
-    private MutableLiveData<Integer> currentStepNumber;
-    private MutableLiveData<List<Boolean>> checkedIngredients;
-    private List<Boolean> checkedIngs = new ArrayList<>();
+    private final BakingRepository mRepo;
+    private final MutableLiveData<Integer> currentStepNumber;
+    private final MutableLiveData<List<Boolean>> checkedIngredients;
+    private final List<Boolean> checkedIngs = new ArrayList<>();
 
     DetailsViewModel(BakingRepository repository) {
         mRepo = repository;

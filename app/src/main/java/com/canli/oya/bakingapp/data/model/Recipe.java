@@ -3,7 +3,6 @@ package com.canli.oya.bakingapp.data.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -27,15 +26,19 @@ public class Recipe {
 
     private int servings;
 
+    @SerializedName("image")
+    private String recipeImage;
+
     @Ignore
     public Recipe(){}
 
-    public Recipe(int recipeId, String recipeName, List<Ingredient> ingredientList, List<Step> stepList, int servings) {
+    public Recipe(int recipeId, String recipeName, List<Ingredient> ingredientList, List<Step> stepList, int servings, String recipeImage) {
         this.recipeId = recipeId;
         this.recipeName = recipeName;
         this.ingredientList = ingredientList;
         this.stepList = stepList;
         this.servings = servings;
+        this.recipeImage = recipeImage;
     }
 
     public int getRecipeId() {
@@ -58,6 +61,10 @@ public class Recipe {
         return servings;
     }
 
+    public String getRecipeImage() {
+        return recipeImage;
+    }
+
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
     }
@@ -76,5 +83,9 @@ public class Recipe {
 
     public void setServings(int servings) {
         this.servings = servings;
+    }
+
+    public void setRecipeImage(String recipeImage) {
+        this.recipeImage = recipeImage;
     }
 }

@@ -8,7 +8,7 @@ import com.canli.oya.bakingapp.data.BakingRepository;
 
 public class DetailsViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private BakingRepository mRepo;
+    private final BakingRepository mRepo;
 
     public DetailsViewModelFactory(BakingRepository repo) {
         this.mRepo = repo;

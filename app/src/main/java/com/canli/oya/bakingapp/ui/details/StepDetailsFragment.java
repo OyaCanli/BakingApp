@@ -57,6 +57,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
     private ImageButton previous_btn, previous_btn_2;
     private ImageButton next_btn, next_btn_2;
     private boolean isLandscapeOfPhone;
+    private boolean mBackwards;
 
     public StepDetailsFragment() {
     }
@@ -106,6 +107,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         if (savedInstanceState != null) {
             videoPosition = savedInstanceState.getLong(Constants.VIDEO_POSITION);
             shouldPlay = savedInstanceState.getBoolean(Constants.IS_PLAYING);
+            mBackwards = savedInstanceState.getBoolean(Constants.IS_BACKWARDS);
         }
 
         return rootView;
@@ -116,15 +118,15 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         super.onActivityCreated(savedInstanceState);
 
         //Get the chosen recipe from ViewModel and get steps from the recipe
-        DetailsViewModelFactory factory = InjectorUtils.provideDetailsViewModelFactory(getActivity());
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(DetailsViewModel.class);
+        DetailsViewModelFactory factory = InjectorUtils.provideDetailsViewModelFactory(requireActivity());
+        viewModel = ViewModelProviders.of(requireActivity(), factory).get(DetailsViewModel.class);
         viewModel.getChosenRecipe().observe(this, new Observer<Recipe>() {
             @Override
             public void onChanged(@Nullable Recipe recipe) {
                 if (recipe != null) {
                     mStepList = recipe.getStepList();
                     mStepCount = mStepList.size();
-                    populateUI(mCurrentStep);
+                    populateUI(mCurrentStep, mBackwards);
                 }
             }
         });
@@ -132,12 +134,12 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
             @Override
             public void onChanged(@Nullable Integer stepNumber) {
                 mCurrentStep = stepNumber;
-                populateUI(mCurrentStep);
+                populateUI(mCurrentStep, mBackwards);
             }
         });
     }
 
-    private void populateUI(final int currentStepNumber) {
+    private void populateUI(final int currentStepNumber, boolean backwards) {
         if(mStepList.isEmpty()) return;
         mVideoUrl = mStepList.get(currentStepNumber).getVideoURL();
         //If video url is not empty, set Exo Player
@@ -166,22 +168,42 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
                     .into(thumbnail_iv);
         }
         //Replace description text with a sliding animation
-        Animation animationOut = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_left_off);
-        animationOut.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {}
+        if (backwards) {
+            Animation animationOut = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_right_off);
+            animationOut.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {}
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Animation animationIn = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_from_right);
-                step_details_tv.startAnimation(animationIn);
-                step_details_tv.setText(mStepList.get(currentStepNumber).getDescription());
-            }
-        });
-        step_details_tv.startAnimation(animationOut);
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Animation animationIn = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_from_left);
+                    step_details_tv.startAnimation(animationIn);
+                    step_details_tv.setText(mStepList.get(currentStepNumber).getDescription());
+                }
+            });
+            step_details_tv.startAnimation(animationOut);
+        } else {
+            Animation animationOut = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_left_off);
+            animationOut.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {}
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {}
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    Animation animationIn = AnimationUtils.loadAnimation(getActivity(), R.anim.translate_from_right);
+                    step_details_tv.startAnimation(animationIn);
+                    step_details_tv.setText(mStepList.get(currentStepNumber).getDescription());
+                }
+            });
+            step_details_tv.startAnimation(animationOut);
+        }
+
     }
 
     private void initializePlayer() {
@@ -195,7 +217,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         // Prepare the MediaSource.
         String userAgent = Util.getUserAgent(getActivity(), "BakingApp");
         MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(mVideoUrl), new DefaultDataSourceFactory(
-                getActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
+                requireActivity(), userAgent), new DefaultExtractorsFactory(), null, null);
         mExoPlayer.prepare(mediaSource);
         mExoPlayer.seekTo(videoPosition);
         mExoPlayer.setPlayWhenReady(shouldPlay);
@@ -233,6 +255,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         super.onSaveInstanceState(outState);
         outState.putLong(Constants.VIDEO_POSITION, videoPosition);
         outState.putBoolean(Constants.IS_PLAYING, shouldPlay);
+        outState.putBoolean(Constants.IS_BACKWARDS, mBackwards);
     }
 
     @Override
@@ -256,6 +279,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
             releasePlayer();
             videoPosition = 0;
             mCurrentStep--;
+            mBackwards = true;
             viewModel.setCurrentStepNumber(mCurrentStep);
         }
     }
@@ -265,6 +289,7 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
             releasePlayer();
             videoPosition = 0;
             mCurrentStep++;
+            mBackwards = false;
             viewModel.setCurrentStepNumber(mCurrentStep);
         }
     }

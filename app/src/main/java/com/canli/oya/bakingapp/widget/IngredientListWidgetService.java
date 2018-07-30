@@ -7,7 +7,7 @@ public class IngredientListWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ListRemoteViewFactory(this.getApplicationContext(), intent);
+        return new ListRemoteViewFactory(this.getApplicationContext());
     }
 
 }
