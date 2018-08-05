@@ -139,6 +139,13 @@ public class StepDetailsFragment extends Fragment implements View.OnClickListene
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.getChosenRecipe().removeObservers(this);
+        viewModel.getCurrentStepNumber().removeObservers(this);
+    }
+
     private void populateUI(final int currentStepNumber, boolean backwards) {
         if(mStepList.isEmpty()) return;
         mVideoUrl = mStepList.get(currentStepNumber).getVideoURL();

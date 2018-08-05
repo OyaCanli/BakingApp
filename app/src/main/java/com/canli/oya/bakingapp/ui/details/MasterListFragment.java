@@ -293,4 +293,12 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         super.onSaveInstanceState(outState);
         outState.putBoolean(Constants.IS_STEPS_SHOWN, isStepsShown);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        viewModel.getChosenRecipe().removeObservers(this);
+        viewModel.getCheckedIngredients().removeObservers(this);
+        viewModel.getCurrentStepNumber().removeObservers(this);
+    }
 }
