@@ -22,3 +22,5 @@ And here are some screenshots:
 Launch icon is taken from the site: www.shareicon.net.
 <div>Placeholder made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
 I changed its colors according to the theme of my app. This app is build for learning purposes, And I don't mean to publish or monetarize this app.
+
+### IMPORTANT NOTE: I share my projects publicly here to build a portfolio and demonstrate my progress to potential recruiters. My Udacian classmates and any other learners are more than welcome to take a look. I'd be happy if others would learn from and get inspired by my projects. However, I'd like to kindly remind that copying large chunks of code and using it in your projects as yours would be "plagiarism". If you're not clear about what is plagiarism and what is not, here is a guide by Udacity: https://udacity.zendesk.com/hc/en-us/articles/360001451091-What-is-plagiarism-

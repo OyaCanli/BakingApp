@@ -15,7 +15,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -186,40 +185,12 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         isStepsShown = true;
         stepRecycler.setVisibility(View.VISIBLE);
         ingredientRecycler.setVisibility(View.GONE);
-        //Set a rotation animation on the ingredients signifier arrow and change the drawable
-        Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
-        rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                ingredients_signifier.setImageResource(R.drawable.ic_arrow_downward);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+        //Set a rotation animation on the ingredients signifier arrow
+        Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise_ingredients);
         ingredients_signifier.startAnimation(rotate_clockwise);
 
-        //Set a rotation animation on the steps signifier arrow and change the drawable
-        Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
-        rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                steps_signifier.setImageResource(R.drawable.ic_arrow_right);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+        //Set a rotation animation on the steps signifier arrow
+        Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise_steps);
         steps_signifier.startAnimation(rotate_counter_clockwise);
 
         TransitionManager.beginDelayedTransition(mConstraintLayout, getTransitionSet());
@@ -233,40 +204,12 @@ public class MasterListFragment extends Fragment implements View.OnClickListener
         ingredientRecycler.setVisibility(View.VISIBLE);
         stepRecycler.setVisibility(View.GONE);
 
-        //Set a rotation animation on the steps signifier arrow and change the drawable
-        Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise);
-        rotate_clockwise.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                steps_signifier.setImageResource(R.drawable.ic_arrow_downward);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+        //Set a rotation animation on the steps signifier arrow
+        Animation rotate_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_clockwise_steps);
         steps_signifier.startAnimation(rotate_clockwise);
 
-        //Set a rotation animation on the ingredients signifier arrow and change the drawable
-        Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise);
-        rotate_counter_clockwise.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                ingredients_signifier.setImageResource(R.drawable.ic_arrow_right);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
+        //Set a rotation animation on the ingredients signifier arrow
+        Animation rotate_counter_clockwise = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_counter_clockwise_ingredients);
         ingredients_signifier.startAnimation(rotate_counter_clockwise);
 
         TransitionManager.beginDelayedTransition(mConstraintLayout, getTransitionSet());
